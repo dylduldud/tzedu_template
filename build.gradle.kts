@@ -1,3 +1,4 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -12,6 +13,8 @@ plugins {
     id("org.jetbrains.intellij") version "1.1.6"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.0"
+    // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
+    id("io.gitlab.arturbosch.detekt") version "1.17.1"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.12"
 }
@@ -22,6 +25,11 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
+}
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
+    compileOnly(files("lib/studio.intellij.android.wizardTemplate.impl-27.1.1.0.jar"))
+    compileOnly(files("lib/studio.intellij.android.wizardTemplate.plugin-27.1.1.0.jar"))
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -41,7 +49,18 @@ changelog {
     version.set(properties("pluginVersion"))
     groups.set(emptyList())
 }
+// Configure detekt plugin.
+// Read more: https://detekt.github.io/detekt/kotlindsl.html
+detekt {
+    config = files("./detekt-config.yml")
+    buildUponDefaultConfig = true
 
+    reports {
+        html.enabled = false
+        xml.enabled = false
+        txt.enabled = false
+    }
+}
 // Configure Gradle Qodana Plugin - read more: https://github.com/JetBrains/gradle-qodana-plugin
 qodana {
     cachePath.set(projectDir.resolve(".qodana").canonicalPath)
