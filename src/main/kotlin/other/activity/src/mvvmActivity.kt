@@ -15,6 +15,7 @@ import android.view.View
 import com.tz.tzbaselib.${if(isUseDataBinding) "TzDBActivity" else "TzActivity"}
 import com.tz.tzbaselib.default.viewModels
 import ${packageName}.viewModel.${activityClass}ViewModel
+import com.alibaba.android.arouter.facade.annotation.Route
 import ${applicationPackage}.R
 ${
     if(isUseDataBinding) 
@@ -23,6 +24,7 @@ ${
         ""
 }
 
+@Route(path = "")
 class ${activityClass}Activity : ${if(isUseDataBinding) "TzDBActivity" else "TzActivity"}<${activityClass}ViewModel${if(isUseDataBinding) ",Activity${activityClass}Binding" else ""}>() {
     
     override val mainViewModel: ${activityClass}ViewModel by viewModels()
@@ -33,10 +35,18 @@ class ${activityClass}Activity : ${if(isUseDataBinding) "TzDBActivity" else "TzA
         mainViewModel.initData()
     }
     
-    override fun initTopBar(): View? = null
+     override val topBarView: View? by lazy {
+        DefaultAppBar(this).createAppBar(contentView as ViewGroup).apply {
+            //不需要AppBar可以移除
+        }.build()
+     }
     
     override fun initView(view: View) {
-        ${if(isUseDataBinding) "mainDataBinding?.model=mainViewModel" else ""}
+        ${if(isUseDataBinding) """
+            mainDataBinding?.apply{
+                model = mainViewModel
+            }
+        """.trimIndent() else ""}
         
     }
     
@@ -50,7 +60,9 @@ import android.view.View
 import com.tz.tzbaselib.TzBaseActivity
 import com.tz.tzbaselib.default.NoneActivityProvider
 import ${applicationPackage}.R
+import com.alibaba.android.arouter.facade.annotation.Route
 
+@Route(path = "")
 class ${activityClass}Activity : TzBaseActivity(), NoneActivityProvider {
  
     override fun bindLayoutId(): Int = R.layout.${layoutName}
@@ -59,7 +71,11 @@ class ${activityClass}Activity : TzBaseActivity(), NoneActivityProvider {
         TODO("Not yet implemented")
     }
     
-    override fun initTopBar(): View? = null
+    override val topBarView: View? by lazy {
+        DefaultAppBar(this).createAppBar(contentView as ViewGroup).apply {
+            //不需要AppBar可以移除
+        }.build()
+     }
     
     override fun initView(view: View) {
         TODO("Not yet implemented")

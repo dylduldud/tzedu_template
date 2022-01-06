@@ -1,23 +1,20 @@
 package other
 
-import com.android.tools.idea.uibuilder.handlers.constraint.drawing.decorator.RadiobuttonWidget
-import com.android.tools.idea.uibuilder.handlers.constraint.model.ConstraintWidget
 import com.android.tools.idea.wizard.template.*
 import com.android.tools.idea.wizard.template.impl.activities.common.MIN_API
 
 class TzeduPluginTemplateProviderImpl : WizardTemplateProvider() {
     override fun getTemplates(): List<Template> = listOf(
         tzActivityTemplate,
+        tzItemTemplate
     )
 }
 
 val tzActivityTemplate
     get() = template {
-        revision = 1
+
         name = "TzMvvmTemplate"
         description = "潭州Mvvm架构基础模板"
-        minApi = MIN_API
-        minBuildApi = MIN_API
 
         category = Category.Other
         formFactor = FormFactor.Mobile
@@ -106,6 +103,67 @@ val tzActivityTemplate
         }
     }
 
+
+val tzItemTemplate
+    get() = template {
+
+        name = "TzItemTemplate"
+        description = "潭州Item模板"
+
+        category = Category.Other
+        formFactor = FormFactor.Mobile
+        screens = listOf(
+            WizardUiContext.MenuEntry,
+            WizardUiContext.NewProject,
+            WizardUiContext.NewModule
+        )
+
+        lateinit var layoutName: StringParameter
+
+        val activityClass = stringParameter {
+            name = "Item Name"
+            default = ""
+            help = "只输入名字，不要包含后缀"
+            constraints = listOf(Constraint.NONEMPTY,Constraint.CLASS,Constraint.UNIQUE)
+
+        }
+
+        layoutName = stringParameter {
+            name = "Layout Name"
+            default = "item_"
+            help = "请输入Item布局的名字"
+            constraints = listOf(Constraint.LAYOUT, Constraint.NONEMPTY)
+            suggest = {
+                activityToLayout(activityClass.value).replaceFirst("activity", "item")
+            }
+        }
+
+        val packageName = defaultPackageNameParameter
+
+        val createDataBinding = booleanParameter {
+            name = "使用DataBinding"
+            default = true
+            help = "是否使用DataBinding"
+        }
+
+
+        widgets(
+            TextFieldWidget(activityClass),
+            TextFieldWidget(layoutName),
+            PackageNameWidget(packageName),
+            CheckBoxWidget(createDataBinding),
+        )
+
+        recipe = { data: TemplateData ->
+            itemRecipe(
+                data as ModuleTemplateData,
+                activityClass.value,
+                layoutName.value,
+                packageName.value,
+                createDataBinding.value
+            )
+        }
+    }
 val defaultPackageNameParameter
     get() = stringParameter {
         name = "包名"
@@ -118,3 +176,5 @@ val defaultPackageNameParameter
 enum class EType {
     Activity, Fragment
 }
+
+

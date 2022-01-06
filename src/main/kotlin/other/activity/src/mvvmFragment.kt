@@ -33,10 +33,14 @@ class ${activityClass}Fragment : ${if(isUseDataBinding) "TzDBFragment" else "TzF
         mainViewModel.initData()
     }
     
-    override fun initTopBar(): View? = null
+    override val topBarView: View? = null
     
     override fun initView(view: View) {
-         ${if(isUseDataBinding) "mainDataBinding?.model=mainViewModel" else ""}
+        ${if(isUseDataBinding) """
+            mainDataBinding?.apply{
+                model = mainViewModel
+            }
+        """.trimIndent() else ""}
         
     }
     
@@ -59,7 +63,7 @@ class ${activityClass}Fragment : TzBaseFragment(), NoneActivityProvider {
         TODO("Not yet implemented")
     }
     
-    override fun initTopBar(): View? = null
+    override val topBarView: View? = null
     
     override fun initView(view: View) {
         TODO("Not yet implemented")

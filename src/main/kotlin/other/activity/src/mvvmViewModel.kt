@@ -13,7 +13,7 @@ import ${packageName}.repository.${activityClass}Repository
 
 class ${activityClass}ViewModel : TzViewModel() {
   
-    val ${activityClass.first().toLowerCase()}${activityClass.substring(1,activityClass.length)}Repository by lazy { ${activityClass}Repository() }
+    private val ${activityClass.first().lowercaseChar()}${activityClass.substring(1,activityClass.length)}Repository by lazy { ${activityClass}Repository() }
     
     fun initData(){
         complete()
