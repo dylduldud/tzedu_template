@@ -12,8 +12,10 @@ fun mvvmActivityKt(
 package $packageName.view
 
 import android.view.View
+import android.view.ViewGroup
 import com.tz.tzbaselib.${if(isUseDataBinding) "TzDBActivity" else "TzActivity"}
-import com.tz.tzbaselib.default.viewModels
+import com.tz.tzbaselib.impl.viewModels
+import com.tz.tzbaselib.impl.DefaultAppBar
 import ${packageName}.viewModel.${activityClass}ViewModel
 import com.alibaba.android.arouter.facade.annotation.Route
 import ${applicationPackage}.R
@@ -57,8 +59,10 @@ else
 package $packageName.view
 
 import android.view.View
+import android.view.ViewGroup
 import com.tz.tzbaselib.TzBaseActivity
-import com.tz.tzbaselib.default.NoneActivityProvider
+import com.tz.tzbaselib.impl.NoneActivityProvider
+import com.tz.tzbaselib.impl.DefaultAppBar
 import ${applicationPackage}.R
 import com.alibaba.android.arouter.facade.annotation.Route
 

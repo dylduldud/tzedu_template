@@ -13,7 +13,7 @@ package $packageName.view
 
 import android.view.View
 import com.tz.tzbaselib.${if(isUseDataBinding) "TzDBFragment" else "TzFragment"}
-import com.tz.tzbaselib.default.viewModels
+import com.tz.tzbaselib.impl.viewModels
 import ${packageName}.viewModel.${activityClass}ViewModel
 import ${applicationPackage}.R
 ${

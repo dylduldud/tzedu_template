@@ -17,7 +17,7 @@ fun RecipeExecutor.itemRecipe(
     val (projectData, srcOut, resOut) = moduleData
     val ktOrJavaExt = projectData.language.extension
     save(
-        itemTemplate(packageName, activityClass, layoutName, packageName, isCreateDataBinding),
+        itemTemplate(projectData.applicationPackage?:"", activityClass, layoutName, packageName, isCreateDataBinding),
         srcOut.resolve("item/${activityClass}Item.${ktOrJavaExt}")
     )
     save(
